@@ -66,13 +66,24 @@ def retr(p, n, target_lat, target_lon):
     # which covers an area of 9 Km (300m x 30 pixel = 9000 m) 
     pixels = []
     excluded_pixels = 0
+    rows= len(lqsf_var)
+    cols=len(lqsf_var[0])
 
-    for i in range(-15, 16):
-        for j in range(-15, 16):
+    right = min(np.abs(cols-result[1][0]),16)
+    left = min(result[0][0],15)
+    up = min(result[1][0],15)
+    down = min(np.abs(rows- result[0][0]),16)
+    print(f'right {right}, left {left}, up {up}, down {down}')
+    print(f"rows {rows}")
+    print(f"x {result[0][0]}")
+    print(f"cols {cols}")
+    print(f"y {result[1][0]}")
+    for i in range(-1*left, right):
+        for j in range(-1*up, down):
             # Check if the current pixel in in Land clear sky value
-            if(lqsf_var[(result[0][0] + i, result[1][0] + j)] == 4):
+            if(lqsf_var[(result[0][0] +j, result[1][0] + i)] == 4):
                 # store a clean land IWV value to the pixels list
-                pixels.append(iwv_band[(result[0][0] + i, result[1][0] + j)])
+                pixels.append(iwv_band[(result[0][0] + j, result[1][0] + i)])
             else:
                 excluded_pixels += 1
     # find the average
@@ -99,10 +110,10 @@ def retr(p, n, target_lat, target_lon):
     return(n + ', ' + elements[11] + ', ' + elements[12] + ', ' + str(date) + ', ' + str(target_x_y) + ', ' + str(target_lon) + ', ' + str(target_lat) + ', '  + str(iwv_value) + ', ' + str(iwv_avg) + ', ' + str(perc_excluded) + ', ' + str(iwv_err_value)) 
 
 # Create the csv file
-f = open("C:/Users/thodoris/Documents/Python_Scripts/s3/s3/s3A_values_orbit.csv" , "w")
-f.write("File, Cycle, Orbit, Date and Time, image x_cord, image y-cord, Longitude, Latitude, IWV, IWV_average, Excluded_pixels (%), IWV error   \n")
+f = open("C:/Users/thodoris/Documents/Python_Scripts/s3/s3/s3B_values_CDN.csv" , "a")
+#f.write("File, Cycle, Orbit, Date and Time, image x_cord, image y-cord, Longitude, Latitude, IWV, IWV_average, Excluded_pixels (%), IWV error   \n")
 
-for root, dirs, files in os.walk('C:/Users/thodoris/Documents/Python_Scripts/s3/s3/data'):
+for root, dirs, files in os.walk('C:/Users/thodoris/Documents/Python_Scripts/s3/s3/data1'):
     for name in dirs:
         # In this step we are in an netcdf image folder
         print(name)

@@ -1,5 +1,5 @@
 def geocalc():
-    with open('locations2.txt', 'r') as f:
+    with open(r"C:\Users\thodoris\Documents\Python_Scripts\s3\s3\locations2.txt", 'r') as f:
         lines = f.readlines()
         # split each line in pieces in order to store the coordinate values
         for i in lines:
